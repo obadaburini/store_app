@@ -3,15 +3,17 @@ import 'package:store_app/models/product.dart';
 
 class CartItem {
   final Product product;
-  int quantity;
+  final int quantity;
 
-  CartItem({required this.product, this.quantity = 1});
+  const CartItem({required this.product, this.quantity = 1});
 }
 
 class CartProvider extends ChangeNotifier {
   final List<CartItem> _items = [];
 
   List<CartItem> get items => List.unmodifiable(_items);
+
+  int get totalQuantity => _items.fold(0, (sum, item) => sum + item.quantity);
 
   int get totalPrice =>
       _items.fold(0, (sum, item) => sum + item.product.price * item.quantity);
@@ -22,7 +24,10 @@ class CartProvider extends ChangeNotifier {
     if (index == -1) {
       _items.add(CartItem(product: product, quantity: 1));
     } else {
-      _items[index].quantity += 1;
+      _items[index] = CartItem(
+        product: product,
+        quantity: _items[index].quantity + 1,
+      );
     }
     notifyListeners();
   }
@@ -32,7 +37,10 @@ class CartProvider extends ChangeNotifier {
     if (index == -1) return;
 
     if (_items[index].quantity > 1) {
-      _items[index].quantity -= 1;
+      _items[index] = CartItem(
+        product: product,
+        quantity: _items[index].quantity - 1,
+      );
     } else {
       _items.removeAt(index);
     }
@@ -40,7 +48,14 @@ class CartProvider extends ChangeNotifier {
   }
 
   void clear() {
+    if (_items.isEmpty) return;
     _items.clear();
     notifyListeners();
+  }
+
+  void remove(Product product) {
+    final count = _items.length;
+    _items.removeWhere((item) => item.product.id == product.id);
+    if (_items.length != count) notifyListeners();
   }
 }

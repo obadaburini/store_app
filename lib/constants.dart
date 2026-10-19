@@ -8,3 +8,5 @@ const kTextLightColor = Color(0xFF747474);
 const kBlueColor = Color(0xFF40BAD5);
 
 const kDefaultPadding = 20.0;
+
+String formatPrice(int value) => '$value درهم';

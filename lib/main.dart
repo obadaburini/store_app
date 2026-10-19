@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'cart/cart_provider.dart';
@@ -22,7 +21,6 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Electrical Store',
-
         locale: _appLocale,
         supportedLocales: _supportedLocales,
         localizationsDelegates: const [
@@ -30,10 +28,8 @@ class MyApp extends StatelessWidget {
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
         ],
-
         theme: AppTheme.build(),
         home: const HomeScreen(),
-
         builder: (context, child) {
           return Directionality(
             textDirection: TextDirection.rtl,
@@ -52,7 +48,7 @@ class AppTheme {
     final colorScheme = ColorScheme.fromSeed(seedColor: kPrimaryColor).copyWith(
       primary: kPrimaryColor,
       secondary: kSecondaryColor,
-      background: kBackgroundColor,
+      surface: Colors.white,
     );
 
     return ThemeData(
@@ -60,27 +56,22 @@ class AppTheme {
       colorScheme: colorScheme,
       scaffoldBackgroundColor: kBackgroundColor,
       visualDensity: VisualDensity.standard,
-      textTheme: GoogleFonts.almaraiTextTheme(),
-
+      fontFamily: 'Almarai',
       appBarTheme: AppBarTheme(
         backgroundColor: kPrimaryColor,
         foregroundColor: Colors.white,
         elevation: 0,
         centerTitle: false,
-        titleTextStyle: GoogleFonts.almarai(
+        titleTextStyle: const TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.w700,
           color: Colors.white,
         ),
       ),
-
       cardTheme: CardThemeData(
         elevation: 6,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
       ),
-
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: kPrimaryColor,
@@ -89,17 +80,16 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(_radius),
           ),
-          textStyle: GoogleFonts.almarai(
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
-          ),
+          textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
         ),
       ),
-
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 14,
+          vertical: 12,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(_radius),
           borderSide: BorderSide.none,
