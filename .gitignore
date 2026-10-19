@@ -33,6 +33,22 @@ migrate_working_dir/
 /build/
 /coverage/
 
+# Local configuration and signing credentials
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.pem
+*.key
+key.properties
+local.properties
+.vs/
+*.user
+**/flutter/ephemeral/
+
 # Symbolication related
 app.*.symbols
 

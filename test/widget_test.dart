@@ -1,30 +1,63 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:store_app/main.dart';
+import 'package:store_app/widgets/product_card.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('browse details, add five units, delete line, and browse again', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
     await tester.pumpWidget(const MyApp());
-
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    await tester.pumpAndSettle();
+    expect(
+      Directionality.of(tester.element(find.byType(ProductCard).first)),
+      TextDirection.rtl,
+    );
+    await tester.tap(find.byType(ProductCard).first);
+    await tester.pumpAndSettle();
+    final add = find.text('إضافة إلى السلة');
+    await tester.ensureVisible(add);
+    for (var count = 0; count < 5; count++) {
+      await tester.ensureVisible(add);
+      await tester.tap(add);
+      await tester.pumpAndSettle();
+      await tester.pump(const Duration(seconds: 2));
+      await tester.pumpAndSettle();
+    }
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('فتح السلة'));
+    await tester.pumpAndSettle();
+    expect(find.text('المجموع: 295 درهم'), findsOneWidget);
+    await tester.tap(find.byTooltip('حذف سماعات لاسلكية'));
+    await tester.pumpAndSettle();
+    expect(find.text('السلة فارغة'), findsOneWidget);
+    await tester.tap(find.text('تصفح المنتجات'));
+    await tester.pumpAndSettle();
+    expect(find.byType(ProductCard), findsNWidgets(6));
+    expect(tester.takeException(), isNull);
   });
+
+  for (final size in [const Size(320, 640), const Size(1440, 1000)]) {
+    testWidgets('catalog and empty cart render without overflow at $size', (
+      tester,
+    ) async {
+      tester.view.physicalSize = size;
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      await tester.pumpWidget(const MyApp());
+      await tester.pumpAndSettle();
+      expect(find.byType(ProductCard), findsNWidgets(6));
+      expect(tester.takeException(), isNull);
+      await tester.tap(find.byTooltip('فتح السلة'));
+      await tester.pumpAndSettle();
+      expect(find.text('السلة فارغة'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+  }
 }
