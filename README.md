@@ -28,11 +28,7 @@ Captured from the actual Flutter web release build in Chrome. Mobile previews us
 | --- | --- |
 | ![Shopping cart with quantities and totals](docs/screenshots/cart.png) | ![Empty cart](docs/screenshots/cart-empty.png) |
 
-| Clear confirmation | Desktop details |
-| --- | --- |
-| ![Clear cart confirmation](docs/screenshots/clear-cart.png) | ![Desktop product details](docs/screenshots/product-details-desktop.png) |
-
-![Responsive desktop catalog](docs/screenshots/home-desktop.png)
+Four representative captures are selected above; the remaining original captures are retained in `docs/screenshots/`.
 
 ## Technology
 
